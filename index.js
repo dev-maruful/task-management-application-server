@@ -27,6 +27,18 @@ async function run() {
 
     const tasksCollection = client.db("taskManagementDB").collection("tasks");
 
+    app.patch("/tasks/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: {
+          status: "completed",
+        },
+      };
+      const result = await tasksCollection.updateOne(filter, updateDoc);
+      res.send(result);
+    });
+
     app.delete("/tasks/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
